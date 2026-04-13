@@ -38,20 +38,18 @@ library(tidyr)
 # Add any ggplot2 layer within a pipe chain
 .add_layer <- function(p, layer) p + layer
 
-# ggplotly creates one "markers" mode trace per (team, game_outcome) combination,
-# resulting in a legend entry for every team × outcome pair.
-# This collapses that into 3 clean Win / Draw / Loss shape entries.
+# ggplotly encodes every grouping aesthetic into trace names like
+# "(Played,Team A,1)" and "(Win,Team A,1)", producing a massive legend.
+# Since the charts label teams directly on the lines, we hide every existing
+# trace from the legend and add just three clean Win / Draw / Loss shape entries.
 .fix_outcome_legend <- function(p) {
-  # Hide all markers-only traces from the legend (these are the per-team outcome
-  # groups ggplotly generates for the shape aesthetic).
   p$x$data <- lapply(p$x$data, function(tr) {
-    if (identical(tr$mode, "markers")) tr$showlegend <- FALSE
+    tr$showlegend <- FALSE
     tr
   })
-  # Add three neutral shape-only legend entries that match ggplot2 shapes
-  #   Win  → shape 17 → plotly "triangle-up"
-  #   Draw → shape 16 → plotly "circle"
-  #   Loss → shape  4 → plotly "x" (line marker)
+  # Win  → ggplot2 shape 17 → plotly "triangle-up"
+  # Draw → ggplot2 shape 16 → plotly "circle"
+  # Loss → ggplot2 shape  4 → plotly "x"
   p |>
     plotly::add_trace(
       inherit = FALSE, type = "scatter", mode = "markers",
