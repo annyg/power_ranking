@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Program Files/R//**)",
+      "Read(//c/Program Files/R/**)",
+      "Bash('/c/Program Files/R/R-4.5.3/bin/Rscript.exe' -e ':*)",
+      "Bash('/c/Program Files/R/R-4.4.2/bin/Rscript.exe' -e ':*)",
+      "Bash(powershell.exe:*)"
+    ]
+  }
+}

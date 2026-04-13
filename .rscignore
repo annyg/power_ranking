@@ -1,0 +1,33 @@
+# renv lockfile (out of sync with installed packages)
+renv.lock
+renv/
+
+# R session files
+.RData
+.RDataTmp
+
+# Dev/editor config
+.claude/
+.posit/
+.vscode/
+.Rbuildignore
+CLAUDE.md
+
+# Local data (users upload via the UI)
+data/
+
+# Legacy Quarto reports and scripts
+scripts/
+
+# Old app version
+shiny_dash.R
+
+# Scrapers (not part of the Shiny app)
+nff_stat_scraper_functions.R
+nff_stat_scraper_j2012.R
+
+# Generated outputs
+*.pdf
+*.png
+*.csv
+Rplot*
