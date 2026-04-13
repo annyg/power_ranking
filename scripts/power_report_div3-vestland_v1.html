@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="ANYthings">
+
+<title>NFF ELO rankings, division 3, Vestland</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="power_report_div3-vestland_v1_files/libs/clipboard/clipboard.min.js"></script>
+<script src="power_report_div3-vestland_v1_files/libs/quarto-html/quarto.js"></script>
+<script src="power_report_div3-vestland_v1_files/libs/quarto-html/popper.min.js"></script>
+<script src="power_report_div3-vestland_v1_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="power_report_div3-vestland_v1_files/libs/quarto-html/anchor.min.js"></script>
+<link href="power_report_div3-vestland_v1_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="power_report_div3-vestland_v1_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="power_report_div3-vestland_v1_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="power_report_div3-vestland_v1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="power_report_div3-vestland_v1_files/libs/bootstrap/bootstrap-32162a2fca7cb0439643f2faaab1edf3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#team-ranking-analysis" id="toc-team-ranking-analysis" class="nav-link active" data-scroll-target="#team-ranking-analysis">Team Ranking Analysis</a></li>
+  <li><a href="#data-inputs" id="toc-data-inputs" class="nav-link" data-scroll-target="#data-inputs">Data inputs</a></li>
+  <li><a href="#results-and-rankings" id="toc-results-and-rankings" class="nav-link" data-scroll-target="#results-and-rankings">Results and rankings</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">NFF ELO rankings, division 3, Vestland</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>ANYthings </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="team-ranking-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="team-ranking-analysis">Team Ranking Analysis</h2>
+<section id="elo-ranking" class="level3">
+<h3 class="anchored" data-anchor-id="elo-ranking">ELO ranking</h3>
+<ul>
+<li>Løst basert på https://en.wikipedia.org/wiki/World_Football_Elo_Ratings</li>
+<li>Alle starter med 1500 i rank. Man taper og vinner rank avhengig av rangering til motstander og seriersmargin</li>
+<li>Vil i teorien stabilisere seg over tid</li>
+<li>Kan brukes til å predikere utfall av kamper
+<ul>
+<li>En prediksjon fra 0 til 1 regnes for hver kamp basert på lagets ELO rangering og motstanders ELO rangering. En prediksjon på 0.7 vil si at man regner med at laget vil vinne denne kampen 7 av 10 ganger.</li>
+</ul></li>
+</ul>
+</section>
+<section id="points" class="level3">
+<h3 class="anchored" data-anchor-id="points">Points</h3>
+<ul>
+<li>3 for seier, 1 for uavgjort, 0 for tap</li>
+<li>Uspilte kamper predikeres basert på siste ELO rank (dvs lag med høyest rank vil vinne det meste, lavest rankt taper det meste osv).</li>
+<li>Tett rangerte lag kan predikeres til uavgjort.</li>
+</ul>
+</section>
+<section id="comparison" class="level3">
+<h3 class="anchored" data-anchor-id="comparison">Comparison</h3>
+<ul>
+<li>Er det samsvar mellom ELO rank og poengstilling</li>
+</ul>
+</section>
+<section id="match-outcome" class="level3">
+<h3 class="anchored" data-anchor-id="match-outcome">Match outcome</h3>
+<ul>
+<li>Er det samsvar mellom prediksjon og resultat i spilte kamper. Grønn = resultat stemmer med forventet resultat , gul = prediksjonen var nokså nøytral (~0.5), rød = resultat stemmer med forventet resultat</li>
+</ul>
+<p>Alle parametre i analysen kan justeres. Dette er ikke noen fasit, men det er morsomt å se. Det er for eksempel interessant å se at KIL er på oppadgående trend, og at toppen i vår pulje ser ut til å være jevnere enn i pulje vest, hvor Heming og GUI ser ut til å rykke ifra.</p>
+</section>
+</section>
+<section id="data-inputs" class="level2">
+<h2 class="anchored" data-anchor-id="data-inputs">Data inputs</h2>
+<p>The data inputs for this analysis.</p>
+<ul>
+<li>Dataset: ../data/kamper_vestland_div3_2025-07-10.xlsx
+<ul>
+<li>The dataset containing match results, team rankings, and other relevant information.</li>
+</ul></li>
+<li>Tournament: 3. div. kvinner Vestland
+<ul>
+<li>The specific tournament or league for which the ELO rankings are calculated.</li>
+</ul></li>
+<li>K-factor: 60
+<ul>
+<li>Constant used in the Elo rating calculation, which determines how much a team’s rating changes after each match.</li>
+</ul></li>
+<li>G-factor:
+<ul>
+<li>The G-factor is a multiplier applied during Elo rating calculations to refine adjustments according to the goal difference in matches. Its primary purpose is to reflect the relative dominance or competitiveness in a game, beyond simply noting who won or lost. By customizing the G-factor based on the goal margin (e.g., 0, 1, 2-3, 4-5, more than 5), we allow the Elo system to account for the degree of victory or loss. This introduces a sensitivity to the results’ granularity, such that a narrow victory has a less pronounced effect than a wide-margin win.</li>
+</ul></li>
+</ul>
+</section>
+<section id="results-and-rankings" class="level2">
+<h2 class="anchored" data-anchor-id="results-and-rankings">Results and rankings</h2>
+<section id="elo-rankings" class="level3">
+<h3 class="anchored" data-anchor-id="elo-rankings">ELO Rankings</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_elo-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="point-standing-and-projected-standing" class="level3">
+<h3 class="anchored" data-anchor-id="point-standing-and-projected-standing">Point standing and projected standing</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_points-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_ppg-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="cujclrjgzh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cujclrjgzh table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#cujclrjgzh thead, #cujclrjgzh tbody, #cujclrjgzh tfoot, #cujclrjgzh tr, #cujclrjgzh td, #cujclrjgzh th {
+  border-style: none;
+}
+
+#cujclrjgzh p {
+  margin: 0;
+  padding: 0;
+}
+
+#cujclrjgzh .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#cujclrjgzh .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#cujclrjgzh .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#cujclrjgzh .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#cujclrjgzh .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#cujclrjgzh .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#cujclrjgzh .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#cujclrjgzh .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#cujclrjgzh .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#cujclrjgzh .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#cujclrjgzh .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#cujclrjgzh .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#cujclrjgzh .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#cujclrjgzh .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#cujclrjgzh .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cujclrjgzh .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#cujclrjgzh .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#cujclrjgzh .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#cujclrjgzh .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cujclrjgzh .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#cujclrjgzh .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cujclrjgzh .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#cujclrjgzh .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cujclrjgzh .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#cujclrjgzh .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#cujclrjgzh .gt_left {
+  text-align: left;
+}
+
+#cujclrjgzh .gt_center {
+  text-align: center;
+}
+
+#cujclrjgzh .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#cujclrjgzh .gt_font_normal {
+  font-weight: normal;
+}
+
+#cujclrjgzh .gt_font_bold {
+  font-weight: bold;
+}
+
+#cujclrjgzh .gt_font_italic {
+  font-style: italic;
+}
+
+#cujclrjgzh .gt_super {
+  font-size: 65%;
+}
+
+#cujclrjgzh .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#cujclrjgzh .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#cujclrjgzh .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#cujclrjgzh .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#cujclrjgzh .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#cujclrjgzh .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#cujclrjgzh .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#cujclrjgzh .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#cujclrjgzh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="10" class="gt_heading gt_title gt_font_normal">Current Standings</th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="10" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">3. div. kvinner Vestland</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="rank" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">rank</th>
+<th id="team" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Team</th>
+<th id="games_played" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Games Played</th>
+<th id="total_points" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total Points</th>
+<th id="total_gd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Goal Difference</th>
+<th id="team_elo" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ELO Rank</th>
+<th id="points_per_game" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Points per Game</th>
+<th id="win" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">win</th>
+<th id="loss" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">loss</th>
+<th id="draw" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">draw</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">1</td>
+<td class="gt_row gt_left" headers="team">Brann 2</td>
+<td class="gt_row gt_right" headers="games_played">10</td>
+<td class="gt_row gt_right" headers="total_points">28</td>
+<td class="gt_row gt_right" headers="total_gd">34</td>
+<td class="gt_row gt_right" headers="team_elo">1801.030</td>
+<td class="gt_row gt_right" headers="points_per_game">2.80</td>
+<td class="gt_row gt_right" headers="win">9</td>
+<td class="gt_row gt_right" headers="loss">0</td>
+<td class="gt_row gt_right" headers="draw">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">2</td>
+<td class="gt_row gt_left" headers="team">Lyngbø</td>
+<td class="gt_row gt_right" headers="games_played">9</td>
+<td class="gt_row gt_right" headers="total_points">24</td>
+<td class="gt_row gt_right" headers="total_gd">39</td>
+<td class="gt_row gt_right" headers="team_elo">1738.859</td>
+<td class="gt_row gt_right" headers="points_per_game">2.67</td>
+<td class="gt_row gt_right" headers="win">8</td>
+<td class="gt_row gt_right" headers="loss">1</td>
+<td class="gt_row gt_right" headers="draw">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">3</td>
+<td class="gt_row gt_left" headers="team">Førde</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">23</td>
+<td class="gt_row gt_right" headers="total_gd">5</td>
+<td class="gt_row gt_right" headers="team_elo">1625.580</td>
+<td class="gt_row gt_right" headers="points_per_game">2.09</td>
+<td class="gt_row gt_right" headers="win">7</td>
+<td class="gt_row gt_right" headers="loss">2</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">4</td>
+<td class="gt_row gt_left" headers="team">Askøy</td>
+<td class="gt_row gt_right" headers="games_played">10</td>
+<td class="gt_row gt_right" headers="total_points">21</td>
+<td class="gt_row gt_right" headers="total_gd">5</td>
+<td class="gt_row gt_right" headers="team_elo">1567.451</td>
+<td class="gt_row gt_right" headers="points_per_game">2.10</td>
+<td class="gt_row gt_right" headers="win">7</td>
+<td class="gt_row gt_right" headers="loss">3</td>
+<td class="gt_row gt_right" headers="draw">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">5</td>
+<td class="gt_row gt_left" headers="team">Bremnes</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">19</td>
+<td class="gt_row gt_right" headers="total_gd">13</td>
+<td class="gt_row gt_right" headers="team_elo">1564.934</td>
+<td class="gt_row gt_right" headers="points_per_game">1.73</td>
+<td class="gt_row gt_right" headers="win">6</td>
+<td class="gt_row gt_right" headers="loss">4</td>
+<td class="gt_row gt_right" headers="draw">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">6</td>
+<td class="gt_row gt_left" headers="team">Os</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">17</td>
+<td class="gt_row gt_right" headers="total_gd">8</td>
+<td class="gt_row gt_right" headers="team_elo">1560.125</td>
+<td class="gt_row gt_right" headers="points_per_game">1.55</td>
+<td class="gt_row gt_right" headers="win">5</td>
+<td class="gt_row gt_right" headers="loss">4</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">7</td>
+<td class="gt_row gt_left" headers="team">Bjarg</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">14</td>
+<td class="gt_row gt_right" headers="total_gd">-4</td>
+<td class="gt_row gt_right" headers="team_elo">1516.634</td>
+<td class="gt_row gt_right" headers="points_per_game">1.27</td>
+<td class="gt_row gt_right" headers="win">4</td>
+<td class="gt_row gt_right" headers="loss">5</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">8</td>
+<td class="gt_row gt_left" headers="team">Fyllingsdalen 2</td>
+<td class="gt_row gt_right" headers="games_played">10</td>
+<td class="gt_row gt_right" headers="total_points">9</td>
+<td class="gt_row gt_right" headers="total_gd">-14</td>
+<td class="gt_row gt_right" headers="team_elo">1351.889</td>
+<td class="gt_row gt_right" headers="points_per_game">0.90</td>
+<td class="gt_row gt_right" headers="win">3</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">9</td>
+<td class="gt_row gt_left" headers="team">Sotra</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">8</td>
+<td class="gt_row gt_right" headers="total_gd">-11</td>
+<td class="gt_row gt_right" headers="team_elo">1361.719</td>
+<td class="gt_row gt_right" headers="points_per_game">0.73</td>
+<td class="gt_row gt_right" headers="win">2</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">10</td>
+<td class="gt_row gt_left" headers="team">Stord</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">8</td>
+<td class="gt_row gt_right" headers="total_gd">-22</td>
+<td class="gt_row gt_right" headers="team_elo">1323.437</td>
+<td class="gt_row gt_right" headers="points_per_game">0.73</td>
+<td class="gt_row gt_right" headers="win">2</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">11</td>
+<td class="gt_row gt_left" headers="team">Arna-Bjørnar 2</td>
+<td class="gt_row gt_right" headers="games_played">10</td>
+<td class="gt_row gt_right" headers="total_points">7</td>
+<td class="gt_row gt_right" headers="total_gd">-31</td>
+<td class="gt_row gt_right" headers="team_elo">1294.474</td>
+<td class="gt_row gt_right" headers="points_per_game">0.70</td>
+<td class="gt_row gt_right" headers="win">2</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">12</td>
+<td class="gt_row gt_left" headers="team">Nordhordland</td>
+<td class="gt_row gt_right" headers="games_played">11</td>
+<td class="gt_row gt_right" headers="total_points">4</td>
+<td class="gt_row gt_right" headers="total_gd">-22</td>
+<td class="gt_row gt_right" headers="team_elo">1293.867</td>
+<td class="gt_row gt_right" headers="points_per_game">0.36</td>
+<td class="gt_row gt_right" headers="win">1</td>
+<td class="gt_row gt_right" headers="loss">9</td>
+<td class="gt_row gt_right" headers="draw">1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="jgkmonmcjo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jgkmonmcjo table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jgkmonmcjo thead, #jgkmonmcjo tbody, #jgkmonmcjo tfoot, #jgkmonmcjo tr, #jgkmonmcjo td, #jgkmonmcjo th {
+  border-style: none;
+}
+
+#jgkmonmcjo p {
+  margin: 0;
+  padding: 0;
+}
+
+#jgkmonmcjo .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jgkmonmcjo .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jgkmonmcjo .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jgkmonmcjo .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jgkmonmcjo .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jgkmonmcjo .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jgkmonmcjo .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jgkmonmcjo .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jgkmonmcjo .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jgkmonmcjo .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jgkmonmcjo .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jgkmonmcjo .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jgkmonmcjo .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jgkmonmcjo .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jgkmonmcjo .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jgkmonmcjo .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jgkmonmcjo .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jgkmonmcjo .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jgkmonmcjo .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jgkmonmcjo .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jgkmonmcjo .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jgkmonmcjo .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jgkmonmcjo .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jgkmonmcjo .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jgkmonmcjo .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jgkmonmcjo .gt_left {
+  text-align: left;
+}
+
+#jgkmonmcjo .gt_center {
+  text-align: center;
+}
+
+#jgkmonmcjo .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jgkmonmcjo .gt_font_normal {
+  font-weight: normal;
+}
+
+#jgkmonmcjo .gt_font_bold {
+  font-weight: bold;
+}
+
+#jgkmonmcjo .gt_font_italic {
+  font-style: italic;
+}
+
+#jgkmonmcjo .gt_super {
+  font-size: 65%;
+}
+
+#jgkmonmcjo .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jgkmonmcjo .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jgkmonmcjo .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jgkmonmcjo .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jgkmonmcjo .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jgkmonmcjo .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jgkmonmcjo .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jgkmonmcjo .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jgkmonmcjo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="10" class="gt_heading gt_title gt_font_normal">Projected Standings</th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="10" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">3. div. kvinner Vestland</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="rank" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">rank</th>
+<th id="team" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Team</th>
+<th id="games_played" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Games Played</th>
+<th id="total_points" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total Points</th>
+<th id="total_gd" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Goal Difference</th>
+<th id="team_elo" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ELO Rank</th>
+<th id="points_per_game" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Points per Game</th>
+<th id="win" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">win</th>
+<th id="loss" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">loss</th>
+<th id="draw" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">draw</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">1</td>
+<td class="gt_row gt_left" headers="team">Brann 2</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">64</td>
+<td class="gt_row gt_right" headers="total_gd">34</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">2.91</td>
+<td class="gt_row gt_right" headers="win">21</td>
+<td class="gt_row gt_right" headers="loss">0</td>
+<td class="gt_row gt_right" headers="draw">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">2</td>
+<td class="gt_row gt_left" headers="team">Lyngbø</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">60</td>
+<td class="gt_row gt_right" headers="total_gd">39</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">2.73</td>
+<td class="gt_row gt_right" headers="win">20</td>
+<td class="gt_row gt_right" headers="loss">2</td>
+<td class="gt_row gt_right" headers="draw">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">3</td>
+<td class="gt_row gt_left" headers="team">Førde</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">50</td>
+<td class="gt_row gt_right" headers="total_gd">5</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">2.27</td>
+<td class="gt_row gt_right" headers="win">16</td>
+<td class="gt_row gt_right" headers="loss">4</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">4</td>
+<td class="gt_row gt_left" headers="team">Askøy</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">41</td>
+<td class="gt_row gt_right" headers="total_gd">5</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">1.86</td>
+<td class="gt_row gt_right" headers="win">13</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">5</td>
+<td class="gt_row gt_left" headers="team">Bremnes</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">39</td>
+<td class="gt_row gt_right" headers="total_gd">13</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">1.77</td>
+<td class="gt_row gt_right" headers="win">12</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">6</td>
+<td class="gt_row gt_left" headers="team">Os</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">37</td>
+<td class="gt_row gt_right" headers="total_gd">8</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">1.68</td>
+<td class="gt_row gt_right" headers="win">11</td>
+<td class="gt_row gt_right" headers="loss">7</td>
+<td class="gt_row gt_right" headers="draw">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">7</td>
+<td class="gt_row gt_left" headers="team">Bjarg</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">29</td>
+<td class="gt_row gt_right" headers="total_gd">-4</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">1.32</td>
+<td class="gt_row gt_right" headers="win">9</td>
+<td class="gt_row gt_right" headers="loss">11</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">8</td>
+<td class="gt_row gt_left" headers="team">Sotra</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">18</td>
+<td class="gt_row gt_right" headers="total_gd">-11</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">0.82</td>
+<td class="gt_row gt_right" headers="win">5</td>
+<td class="gt_row gt_right" headers="loss">14</td>
+<td class="gt_row gt_right" headers="draw">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">9</td>
+<td class="gt_row gt_left" headers="team">Fyllingsdalen 2</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">17</td>
+<td class="gt_row gt_right" headers="total_gd">-14</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">0.77</td>
+<td class="gt_row gt_right" headers="win">5</td>
+<td class="gt_row gt_right" headers="loss">15</td>
+<td class="gt_row gt_right" headers="draw">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">10</td>
+<td class="gt_row gt_left" headers="team">Stord</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">11</td>
+<td class="gt_row gt_right" headers="total_gd">-22</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">0.50</td>
+<td class="gt_row gt_right" headers="win">2</td>
+<td class="gt_row gt_right" headers="loss">15</td>
+<td class="gt_row gt_right" headers="draw">5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="rank">11</td>
+<td class="gt_row gt_left" headers="team">Arna-Bjørnar 2</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">9</td>
+<td class="gt_row gt_right" headers="total_gd">-31</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">0.41</td>
+<td class="gt_row gt_right" headers="win">2</td>
+<td class="gt_row gt_right" headers="loss">17</td>
+<td class="gt_row gt_right" headers="draw">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="rank">12</td>
+<td class="gt_row gt_left" headers="team">Nordhordland</td>
+<td class="gt_row gt_right" headers="games_played">22</td>
+<td class="gt_row gt_right" headers="total_points">6</td>
+<td class="gt_row gt_right" headers="total_gd">-22</td>
+<td class="gt_row gt_right" headers="team_elo">NA</td>
+<td class="gt_row gt_right" headers="points_per_game">0.27</td>
+<td class="gt_row gt_right" headers="win">1</td>
+<td class="gt_row gt_right" headers="loss">18</td>
+<td class="gt_row gt_right" headers="draw">3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="zfazgyhasr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zfazgyhasr table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#zfazgyhasr thead, #zfazgyhasr tbody, #zfazgyhasr tfoot, #zfazgyhasr tr, #zfazgyhasr td, #zfazgyhasr th {
+  border-style: none;
+}
+
+#zfazgyhasr p {
+  margin: 0;
+  padding: 0;
+}
+
+#zfazgyhasr .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#zfazgyhasr .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zfazgyhasr .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zfazgyhasr .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zfazgyhasr .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zfazgyhasr .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zfazgyhasr .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zfazgyhasr .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zfazgyhasr .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#zfazgyhasr .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#zfazgyhasr .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zfazgyhasr .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zfazgyhasr .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zfazgyhasr .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zfazgyhasr .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfazgyhasr .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#zfazgyhasr .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#zfazgyhasr .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#zfazgyhasr .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfazgyhasr .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#zfazgyhasr .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfazgyhasr .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zfazgyhasr .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfazgyhasr .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zfazgyhasr .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zfazgyhasr .gt_left {
+  text-align: left;
+}
+
+#zfazgyhasr .gt_center {
+  text-align: center;
+}
+
+#zfazgyhasr .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zfazgyhasr .gt_font_normal {
+  font-weight: normal;
+}
+
+#zfazgyhasr .gt_font_bold {
+  font-weight: bold;
+}
+
+#zfazgyhasr .gt_font_italic {
+  font-style: italic;
+}
+
+#zfazgyhasr .gt_super {
+  font-size: 65%;
+}
+
+#zfazgyhasr .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#zfazgyhasr .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#zfazgyhasr .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#zfazgyhasr .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#zfazgyhasr .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#zfazgyhasr .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#zfazgyhasr .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#zfazgyhasr .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#zfazgyhasr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="8" class="gt_heading gt_title gt_font_normal">Total Points per Team</th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="8" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">3. div. kvinner Vestland</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Status" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Status</th>
+<th id="number_of_teams" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Number of Teams</th>
+<th id="total_points" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total Points</th>
+<th id="total_games" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total Games</th>
+<th id="total_points_per_team" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Points per Team</th>
+<th id="available_points_per_game" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Points per Game</th>
+<th id="Win/Loss-games" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Win/Loss games</th>
+<th id="Draw-games" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Draw games</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Status">Played</td>
+<td class="gt_row gt_right" headers="number_of_teams">12</td>
+<td class="gt_row gt_right" headers="total_points">182</td>
+<td class="gt_row gt_right" headers="total_games">63</td>
+<td class="gt_row gt_right" headers="total_points_per_team">15.17</td>
+<td class="gt_row gt_right" headers="available_points_per_game">2.89</td>
+<td class="gt_row gt_right" headers="Win/Loss games">56</td>
+<td class="gt_row gt_right" headers="Draw games">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Status">Projected</td>
+<td class="gt_row gt_right" headers="number_of_teams">12</td>
+<td class="gt_row gt_right" headers="total_points">381</td>
+<td class="gt_row gt_right" headers="total_games">132</td>
+<td class="gt_row gt_right" headers="total_points_per_team">31.75</td>
+<td class="gt_row gt_right" headers="available_points_per_game">2.89</td>
+<td class="gt_row gt_right" headers="Win/Loss games">117</td>
+<td class="gt_row gt_right" headers="Draw games">15</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="match-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="match-predictions">Match predictions</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_match_predictions_round-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_heat_ppg-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="power_report_div3-vestland_v1_files/figure-html/figure_elo_point_comparison-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

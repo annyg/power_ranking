@@ -1,0 +1,188 @@
+---
+title: "`r params$tournament`"
+subtitle: "ELO Power Rankings & Match Analytics"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+author: "ANYthings"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: true
+    toc_depth: 2
+    number_sections: false
+    fig_width: 9
+    fig_height: 5.5
+    fig_caption: true
+    keep_tex: false
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{Arial}
+  - \usepackage{geometry}
+  - \geometry{a4paper, margin=2.5cm}
+  - \usepackage{xcolor}
+  - \definecolor{anythingsblack}{HTML}{1A1A1A}
+  - \definecolor{anythingsgrey}{HTML}{767676}
+  - \definecolor{anythingsred}{HTML}{E03C31}
+  - \definecolor{anythingsblue}{HTML}{0B3D91}
+  - \definecolor{anythingslightgrey}{HTML}{D9D9D9}
+  - \usepackage{fancyhdr}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \fancyhead[R]{\small\color{anythingsgrey} ANYthings}
+  - \makeatletter
+  - \fancyhead[L]{\small\color{anythingsgrey} \@title}
+  - \makeatother
+  - \fancyfoot[C]{\small\color{anythingsgrey}\thepage}
+  - \renewcommand{\headrulewidth}{0.4pt}
+  - \renewcommand{\headrule}{\hbox to\headwidth{\color{anythingslightgrey}\leaders\hrule height \headrulewidth\hfill}}
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{caption}
+  - \captionsetup{font=small, labelfont=bf, textfont=it}
+params:
+  data: NULL
+  figures: NULL
+  tables: NULL
+  tournament: "Tournament"
+  k_factor: 60
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo    = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  out.width = "100%",
+  fig.align = "center"
+)
+
+library(gt)
+library(ggplot2)
+library(dplyr)
+
+data     <- params$data
+figs     <- params$figures
+tables   <- params$tables
+```
+
+\newpage
+
+# Introduction
+
+This report presents ELO-based power rankings and match analytics for **`r params$tournament`**.
+
+**Methodology:**
+
+- **ELO Rating** — Adapted from the [World Football Elo Ratings](https://en.wikipedia.org/wiki/World_Football_Elo_Ratings) system. All teams begin with a rating of 1,500. Ratings are updated after each match based on the result and the goal margin.
+- **G-factor** — A goal-difference multiplier applied during Elo updates: ×1.0 (draw), ×1.1 (1-goal win), ×1.5 (2–3 goals), ×2.0 (4–5 goals), ×2.5 (6+ goals).
+- **K-factor** — Controls Elo rating sensitivity. K = `r params$k_factor` was used for this analysis.
+- **Projected standings** — Unplayed matches are estimated using current Elo win probabilities: ≥0.55 → win (3 pts), 0.45–0.55 → draw (1 pt), <0.45 → loss (0 pts).
+- **Strength score** — A composite metric combining total points and goal differential per game, used alongside Elo.
+
+\newpage
+
+# Current Standings
+
+```{r tbl-current, results="asis"}
+gt::as_latex(tables$tbl_current)
+```
+
+\vspace{1em}
+
+```{r tbl-projected, results="asis"}
+gt::as_latex(tables$tbl_projected)
+```
+
+\newpage
+
+# ELO Rankings
+
+```{r fig-elo, fig.cap="ELO rating progression over the season. Solid line = played matches; dashed = projected. Shape indicates match outcome."}
+figs$fig_elo
+```
+
+\newpage
+
+```{r fig-comp, fig.cap="Correlation between ELO rating and total points. Teams above the reference line are over-performing their ELO; below the line indicates under-performance."}
+figs$fig_comp
+```
+
+\newpage
+
+# Points & Form
+
+```{r fig-points, fig.cap="Cumulative points over the season. Dashed segments show projected outcomes based on current ELO ratings."}
+figs$fig_points
+```
+
+\vspace{1em}
+
+```{r fig-ppg, fig.cap="Points per game normalised for number of matches played. Dashed = projected."}
+figs$fig_ppg
+```
+
+\newpage
+
+```{r tbl-form, results="asis"}
+gt::as_latex(tables$tbl_form)
+```
+
+\vspace{1em}
+
+```{r fig-home-away, fig.height=4, fig.cap="Home vs away points per game. Reveals which teams depend on home advantage."}
+figs$fig_home_away
+```
+
+\newpage
+
+# Attack & Defence
+
+```{r fig-attack-defense, fig.cap="Attack vs defence profile. X-axis = goals scored per game; Y-axis = goals conceded per game. Top-right quadrant = high-scoring but defensive vulnerability; bottom-right = title contenders."}
+figs$fig_attack_defense
+```
+
+\newpage
+
+# Match Analysis
+
+```{r fig-heatmap-round, fig.height=10, fig.cap="Match outcomes and ELO predictions by round. Top = opponent name, middle = W/D/L, bottom = predicted win probability. Green = result matched prediction; red = upset."}
+figs$fig_heatmap_round
+```
+
+\newpage
+
+```{r fig-heatmap-matchup, fig.cap="Head-to-head result matrix. Each cell shows the outcome and ELO win probability for the row team against the column team."}
+figs$fig_heatmap_matchup
+```
+
+\newpage
+
+# ELO Momentum
+
+```{r fig-momentum, fig.height=4, fig.cap="ELO rating change in the most recent round played. Green = gained rating; red = lost rating."}
+figs$fig_elo_momentum
+```
+
+\newpage
+
+# Home vs Away Breakdown
+
+```{r tbl-homeaway, results="asis"}
+gt::as_latex(tables$tbl_homeaway)
+```
+
+\newpage
+
+# League Summary
+
+```{r tbl-league, results="asis"}
+gt::as_latex(tables$tbl_league)
+```
+
+---
+
+\vspace{2em}
+
+\small\color{anythingsgrey}
+
+*Report generated `r format(Sys.time(), "%Y-%m-%d %H:%M")` · ELO K-factor `r params$k_factor` · Analysis by ANYthings*

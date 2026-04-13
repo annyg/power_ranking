@@ -189,12 +189,12 @@ fig_weighted_points <- team_stats_by_round_w_strength %>%
 fig_gd_total <- ggplot(team_stats_by_round, aes(x = games_played, y = total_gd, color = team)) +
   geom_hline(yintercept = 0, linetype = "longdash") +                                 # Add horizontal lines
   geom_line(linewidth = 0.7, alpha = 0.8) +
-  geom_text(data = end_points,                      # Add labels to endpoints
+  geom_text(data = end_points_played,                      # Add labels to endpoints
             aes(label = team),
             hjust = -0.2,                           # Horizontal adjustment (push text slightly to the right)
             size = 4, angle = -10) +                             # Font size
   scale_y_continuous(breaks = seq(-100, 100, by = 2), minor_breaks = NULL) +   # Set y-axis breaks
-  scale_x_continuous(limits = c(0,6.5), breaks = seq(0, 7, by = 1), minor_breaks = NULL) +   # Set x-axis breaks
+  scale_x_continuous(limits = c(0,12), breaks = seq(0, 7, by = 1), minor_breaks = NULL) +   # Set x-axis breaks
   labs(title = "Total Goal Difference Over Games Played", x = "Games played", y = "Goal Difference") +
   hrbrthemes::theme_ipsum_rc() +
   ggsci::scale_color_d3()  +
@@ -204,7 +204,7 @@ fig_gd_total
 fig_gd <- ggplot(team_stats_by_round, aes(x = games_played, y = gd, color = team)) +
   geom_hline(yintercept = 0, linetype = "longdash") +                                 # Add horizontal lines
   geom_line(linewidth = 0.7, alpha = 0.8) +
-  geom_text(data = end_points,                      # Add labels to endpoints
+  geom_text(data = end_points_played,                      # Add labels to endpoints
             aes(label = team),
             hjust = -0.2,                           # Horizontal adjustment (push text slightly to the right)
             size = 4, angle = -10) +                             # Font size

@@ -14,10 +14,18 @@ update_elo <- function(rating1, rating2, score1 = NULL, score2 = NULL, k_factor 
   outcome_score1 <- ifelse(score1 > score2, 1, ifelse(score1 == score2, 0.5, 0))
 
   goal_diff <- abs(score1 - score2)
-  G <- ifelse(goal_diff == 0, 1,
-              ifelse(goal_diff == 1, 1,
-                     ifelse(goal_diff == 2, 1.5,
-                            (11 + goal_diff) / 8)))
+  # Apply weighting based on goal differences
+  # G <- ifelse(goal_diff == 0, 1,
+  #             ifelse(goal_diff == 1, 1,
+  #                    ifelse(goal_diff == 2, 1.5,
+  #                           (11 + goal_diff) / 8)))
+  G <- case_when(
+    goal_diff == 0 ~ 1,
+    goal_diff == 1 ~ 1.1,                 # Slight adjustment for single goal difference
+    goal_diff %in% 2:3 ~ 1.5,             # Moderate adjustment for 2-3 goals
+    goal_diff %in% 4:5 ~ 2.0,             # Significant adjustment for 4-5 goals
+    goal_diff > 5 ~ 2.5                   # Larger adjustment for more than 5 goals
+  )
 
   rating1_new <- rating1 + k_factor * G * (outcome_score1 - expected_score_a)
   rating2_new <- rating2 + k_factor * G * ((1 - outcome_score1) - (1 - expected_score_a))
@@ -265,6 +273,8 @@ team_stats_by_round_w_strength <- team_stats_by_round %>%
   mutate(
     games_played = cumsum(if_else(team_type %in% c("a", "b"), 1, 0)),  # Only count when team_type is 'a' or 'b'
     total_points = cumsum(ifelse(is.na(points), 0, points)),
+    points_per_game = round(total_points / games_played, 2),  # Calculate points per game
+    points_per_game = case_when(week == lubridate::isoweek(date_season_start) ~ 0, TRUE ~ points_per_game),  # Initialize ppg for week 13)
     total_gd = cumsum(ifelse(is.na(gd), 0, gd)),
     total_scored = cumsum(ifelse(is.na(score), 0, score)),
     total_scored_against = cumsum(ifelse(is.na(score_against), 0, score_against)),
@@ -306,7 +316,22 @@ team_stats_by_round_w_strength <- team_stats_by_round %>%
   mutate(
     prediction_gradient = case_when(points_status == "Played" ~ prediction_gradient,  # Only apply to played games
                                     TRUE ~ NA_real_)  # Set NA for unplayed games
-  )
+  ) %>%
+group_by(team, week) %>%
+  mutate(
+    game_number = row_number(),) %>%
+  ungroup() %>%
+  mutate(
+    week = factor(week, levels = sort(unique(as.numeric(week)), decreasing = TRUE)),
+    opponent_short = str_trunc(opponent, width = 9, side = "right", ellipsis = "..."),
+    # team = factor(team, levels = end_points_played$team),
+    week_game = paste0("week ", week, " game ", game_number),
+  ) %>%
+  mutate(
+    week_game = factor(week_game, levels = sort(unique(week_game), decreasing = TRUE)),  # Ensure ascending order
+    points_fill = case_when(points_status == "Played" ~ points_per_game,
+                            points_status == "Projected" ~ NA_real_)
+  ) #%>%
 
 # Step 6: Calculating Rankings with Adjusted Metrics ####
 # Summarize aggregate stats for each team, including strength-based metrics

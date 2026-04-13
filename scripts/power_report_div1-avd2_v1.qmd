@@ -1,0 +1,220 @@
+---
+title: "NFF ELO rankings, division 1, avdeling 2 (Øst)"
+author: "ANYthings"
+toc: true
+toc-title: "Table of Contents"
+toc-depth: 2
+code-fold: true
+code-summary: "Show/Hide Code"
+fig_format: svg
+fig-width: 10
+fig-height: 8
+fig-cap: "ELO rankings and match predictions"
+format: 
+  html:
+    theme: cosmo
+  # pdf: default
+    # toc: true
+    # toc-title: "Table of Contents"
+    # toc-depth: 2
+    # code-fold: true
+    # code-summary: "Show/Hide Code"
+    # fig-width: 10
+    # fig-height: 8
+    # fig-cap: "ELO rankings and match predictions"
+    # latex-engine: xelatex
+    # includes:
+    #   in_header: header.tex
+  docx: default
+#   toc: true
+#   toc-title: "Table of Contents"
+#   toc-depth: 2
+#   code-fold: true
+#   code-summary: "Show/Hide Code"
+#   fig-width: 10
+#   fig-height: 8
+#   fig-cap: "ELO rankings and match predictions"
+#   documentclass: report
+#    fontsize: 11pt
+#    geometry: margin=1in
+#    font: serif  # Enforce PDF-based compatible font choice
+---
+
+```{r}
+#| label: packages
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+options(bitmapType = "cairo")
+```
+
+```{r}
+#| label: data_inputs
+#| echo: false
+
+data <- "../data/kamper_012_25-07-10.xlsx"
+k_factor <- 60
+```
+
+```{r}
+#| echo: false
+
+matches <- readxl::read_excel(data)
+matches <-matches %>%
+  dplyr::filter(Hjemmelag != "Ready") %>%
+  dplyr::filter(Bortelag != "Ready")
+tournament <- matches$Turnering[1]
+```
+
+## Team Ranking Analysis
+
+### ELO ranking
+
+-   Løst basert på https://en.wikipedia.org/wiki/World_Football_Elo_Ratings
+-   Alle starter med 1500 i rank. Man taper og vinner rank avhengig av rangering til motstander og seriersmargin
+-   Vil i teorien stabilisere seg over tid
+-   Kan brukes til å predikere utfall av kamper
+    -   En prediksjon fra 0 til 1 regnes for hver kamp basert på lagets ELO rangering og motstanders ELO rangering. En prediksjon på 0.7 vil si at man regner med at laget vil vinne denne kampen 7 av 10 ganger.
+
+### Points
+
+-   3 for seier, 1 for uavgjort, 0 for tap
+-   Uspilte kamper predikeres basert på siste ELO rank (dvs lag med høyest rank vil vinne det meste, lavest rankt taper det meste osv).
+-   Tett rangerte lag kan predikeres til uavgjort.
+
+### Comparison
+
+-   Er det samsvar mellom ELO rank og poengstilling
+
+### Match outcome
+
+-   Er det samsvar mellom prediksjon og resultat i spilte kamper. Grønn = resultat stemmer med forventet resultat , gul = prediksjonen var nokså nøytral (\~0.5), rød = resultat stemmer med forventet resultat
+
+Alle parametre i analysen kan justeres. Dette er ikke noen fasit, men det er morsomt å se. Det er for eksempel interessant å se at KIL er på oppadgående trend, og at toppen i vår pulje ser ut til å være jevnere enn i pulje vest, hvor Heming og GUI ser ut til å rykke ifra.
+
+## Data inputs
+
+The data inputs for this analysis.
+
+-   Dataset: `r data`
+    -   The dataset containing match results, team rankings, and other relevant information.
+-   Tournament: `r tournament`
+    -   The specific tournament or league for which the ELO rankings are calculated.
+-   K-factor: `r k_factor`
+    -   Constant used in the Elo rating calculation, which determines how much a team's rating changes after each match.
+-   G-factor:
+    -   The G-factor is a multiplier applied during Elo rating calculations to refine adjustments according to the goal difference in matches. Its primary purpose is to reflect the relative dominance or competitiveness in a game, beyond simply noting who won or lost. By customizing the G-factor based on the goal margin (e.g., 0, 1, 2-3, 4-5, more than 5), we allow the Elo system to account for the degree of victory or loss. This introduces a sensitivity to the results' granularity, such that a narrow victory has a less pronounced effect than a wide-margin win.
+
+```{r}
+#| label: data_preparation
+#| echo: false
+#| warning: false
+
+source("power_rankings_v6.R")
+```
+
+## Results and rankings
+
+```{r}
+#| label: figure_data_preparation
+#| echo: false
+#| warning: false
+
+source("figures_and_tables_v1.R")
+```
+
+### ELO Rankings
+
+```{r}
+#| label: figure_elo
+#| echo: false
+#| warning: false
+# Elo ranking plot ####
+fig_elo
+```
+
+### Point standing and projected standing
+
+```{r}
+#| label: figure_points
+#| echo: false
+#| warning: false
+# Point rankings and projections ####
+fig_points
+```
+
+
+```{r}
+#| label: figure_ppg
+#| echo: false
+#| warning: false
+# Point rankings and projections ####
+fig_ppg
+```
+
+```{r}
+#| label: tbl_standings_current
+#| echo: false
+#| warning: false
+# Add table with the final standings
+tbl_standings_current_gt
+```
+
+```{r}
+#| label: tbl_standings_proj
+#| echo: false
+#| warning: false
+# Add table with the projected standings
+tbl_standings_projected_gt
+```
+
+```{r}
+#| label: tbl_ppg
+#| echo: false
+#| warning: false
+# Table with total points per team
+tbl_points_per_team_gt
+```
+
+### Match predictions
+
+```{r}
+#| label: figure_match_predictions
+#| echo: false
+#| warning: false
+# Heat plot ####
+# heatmap_plot
+```
+
+```{r}
+#| label: figure_match_predictions_round
+#| echo: false
+#| warning: false
+#| fig.width: 10
+#| fig.height: 12
+# Heat plot ####
+# Visualization using a heatmap
+heatmap_plot_round
+```
+
+```{r}
+#| label: figure_heat_ppg
+#| echo: false
+#| warning: false
+#| fig.width: 10
+#| fig.height: 12
+# Heat plot ####
+# Visualization using a heatmap
+heatmap_plot_ppg
+```
+
+```{r}
+#| label: figure_elo_point_comparison
+#| echo: false
+#| warning: false
+# Compare points and Elo rankings ####
+fig_comp
+```
