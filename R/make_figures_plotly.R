@@ -38,6 +38,47 @@ library(tidyr)
 # Add any ggplot2 layer within a pipe chain
 .add_layer <- function(p, layer) p + layer
 
+# ggplotly creates one "markers" mode trace per (team, game_outcome) combination,
+# resulting in a legend entry for every team × outcome pair.
+# This collapses that into 3 clean Win / Draw / Loss shape entries.
+.fix_outcome_legend <- function(p) {
+  # Hide all markers-only traces from the legend (these are the per-team outcome
+  # groups ggplotly generates for the shape aesthetic).
+  p$x$data <- lapply(p$x$data, function(tr) {
+    if (identical(tr$mode, "markers")) tr$showlegend <- FALSE
+    tr
+  })
+  # Add three neutral shape-only legend entries that match ggplot2 shapes
+  #   Win  → shape 17 → plotly "triangle-up"
+  #   Draw → shape 16 → plotly "circle"
+  #   Loss → shape  4 → plotly "x" (line marker)
+  p |>
+    plotly::add_trace(
+      inherit = FALSE, type = "scatter", mode = "markers",
+      x = numeric(0), y = numeric(0),
+      name       = "Win",
+      marker     = list(symbol = "triangle-up", size = 9, color = "#333333"),
+      showlegend = TRUE, hoverinfo = "none"
+    ) |>
+    plotly::add_trace(
+      inherit = FALSE, type = "scatter", mode = "markers",
+      x = numeric(0), y = numeric(0),
+      name       = "Draw",
+      marker     = list(symbol = "circle", size = 9, color = "#333333"),
+      showlegend = TRUE, hoverinfo = "none"
+    ) |>
+    plotly::add_trace(
+      inherit = FALSE, type = "scatter", mode = "markers",
+      x = numeric(0), y = numeric(0),
+      name       = "Loss",
+      marker     = list(
+        symbol = "x", size = 9, color = "#333333",
+        line   = list(width = 2, color = "#333333")
+      ),
+      showlegend = TRUE, hoverinfo = "none"
+    )
+}
+
 # Shared plotly layout that matches the ANYthings brand
 .brand <- function(p) {
   p |>
@@ -166,7 +207,8 @@ make_figures_plotly <- function(data, gg_figures) {
       show.legend = FALSE
     )) |>
     plotly::ggplotly(tooltip = "all") |>
-    .brand()
+    .brand() |>
+    .fix_outcome_legend()
 
   fig_points <- gg_figures$fig_points |>
     .strip_repel() |>
@@ -179,7 +221,8 @@ make_figures_plotly <- function(data, gg_figures) {
       show.legend = FALSE
     )) |>
     plotly::ggplotly(tooltip = "all") |>
-    .brand()
+    .brand() |>
+    .fix_outcome_legend()
 
   fig_ppg <- gg_figures$fig_ppg |>
     .strip_repel() |>
@@ -192,7 +235,8 @@ make_figures_plotly <- function(data, gg_figures) {
       show.legend = FALSE
     )) |>
     plotly::ggplotly(tooltip = "all") |>
-    .brand()
+    .brand() |>
+    .fix_outcome_legend()
 
   # ---- 4. ELO vs Points scatter -----------------------------------------------
   # colour = team is only in geom_point's local aes, so specify it explicitly.
