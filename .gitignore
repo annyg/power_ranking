@@ -1,4 +1,31 @@
+# R session artefacts
 .Rproj.user
 .Rhistory
 .RData
+.RDataTmp
 .Ruserdata
+
+# renv — keep activate.R + settings.json + renv.lock (package pinning),
+# ignore the local library and staging cache
+renv/library/
+renv/staging/
+
+# Local match data — users upload files through the app UI
+data/
+
+# Generated plots and exports in the project root
+*.png
+*.pdf
+Rplot*
+team_stats_by_round_exp.csv
+
+# Quarto rendered outputs in scripts/ (keep source .qmd/.R, ignore built files)
+scripts/*.html
+scripts/*.docx
+scripts/*.pdf
+scripts/*_files/
+
+# Local IDE / tool configs (not relevant to other contributors or CI)
+.vscode/
+.posit/
+.claude/
